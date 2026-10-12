@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('guests', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('wedding_id')->constrained()->cascadeOnDelete();
+            $table->string('name', 150);
+            $table->string('whatsapp_number', 25)->nullable();
+            $table->string('slug', 150);
+            $table->enum('status', ['pending', 'sent', 'opened', 'confirmed'])->default('pending')->index();
+            $table->timestamps();
+
+            $table->unique(['wedding_id', 'slug']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('guests');
+    }
+};
